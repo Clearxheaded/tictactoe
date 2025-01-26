@@ -34,6 +34,7 @@ const GameController = (() => {
         currentPlayer = player1;
         gameOver = false;
         Gameboard.resetBoard();
+        updateUI();
     };
 
     const playTurn = (index) => {
@@ -41,12 +42,16 @@ const GameController = (() => {
             return;
         }
 
+        updateUI();
+
         if (checkWinner()) {
             gameOver = true;
-            console.log(`${currentPlayer.getName()} wins!`);
+            document.getElementById('gameStatus').textContent = `${currentPlayer.getName()} wins!`;
+            document.getElementById('gameStatus').style.color = currentPlayer.getMarker() === 'X' ? '#FF6B6B' : '#4ECDC4';
         } else if (checkTie()) {
             gameOver = true;
-            console.log("It's a tie!");
+            document.getElementById('gameStatus').textContent = "It's a tie!";
+            document.getElementById('gameStatus').style.color = '#333';
         } else {
             switchTurn();
         }
@@ -77,5 +82,40 @@ const GameController = (() => {
         return Gameboard.getBoard().every(cell => cell !== '');
     };
 
+    const updateUI = () => {
+        const cells = document.querySelectorAll('.cell');
+        const board = Gameboard.getBoard();
+
+        cells.forEach((cell, index) => {
+            cell.textContent = board[index];
+            cell.classList.remove('x', 'o');
+            if (board[index] === 'X') {
+                cell.classList.add('x');
+            } else if (board[index] === 'O') {
+                cell.classList.add('o');
+            }
+        });
+    };
+
     return { initializeGame, playTurn };
 })();
+
+function startGame() {
+    const player1Name = document.getElementById('player1Name').value || 'Player 1';
+    const player2Name = document.getElementById('player2Name').value || 'Player 2';
+
+    GameController.initializeGame(player1Name, player2Name);
+
+    document.getElementById('gameStatus').textContent = '';
+    document.querySelectorAll('.cell').forEach(cell => {
+        cell.textContent = '';
+        cell.classList.remove('x', 'o');
+    });
+}
+
+document.getElementById('gameBoard').addEventListener('click', (event) => {
+    if (event.target.classList.contains('cell')) {
+        const index = event.target.getAttribute('data-index');
+        GameController.playTurn(parseInt(index));
+    }
+});
