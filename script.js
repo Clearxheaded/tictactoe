@@ -1,5 +1,4 @@
 const Gameboard = (() => {
-    // Private variable to store the gameboard state
     let board = ['', '', '', '', '', '', '', '', ''];
 
     return {
@@ -10,22 +9,19 @@ const Gameboard = (() => {
                 board[index] = marker;
                 return true;
             }
-            return false; // For invalid move
+            return false; // Invalid move
         },
 
-        // Reset the board for a new game
         resetBoard: () => {
             board = ['', '', '', '', '', '', '', '', ''];
         }
     };
 })();
 
-const Player = (name, marker) => {
-    return {
-        getName: () => name,
-        getMarker: () => marker,
-    };
-};
+const Player = (name, marker) => ({
+    getName: () => name,
+    getMarker: () => marker,
+});
 
 const GameController = (() => {
     let player1, player2;
@@ -61,6 +57,19 @@ const GameController = (() => {
     };
 
     const checkWinner = () => {
+        const board = Gameboard.getBoard();
+        const winningCombinations = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6],
+        ];
+
+        for (let combination of winningCombinations) {
+            const [a, b, c] = combination;
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                return true; // Winner found
+            }
+        }
         return false;
     };
 
