@@ -12,6 +12,15 @@
     <div class="game-container">
         <h1 class="game-title">Tic Tac Toe</h1>
 
+        <div class="game-mode-selector">
+            <label>
+                <input type="radio" name="gameMode" value="pvp" checked> Player vs Player
+            </label>
+            <label>
+                <input type="radio" name="gameMode" value="pvc"> Player vs Computer
+            </label>
+        </div>
+
         <div class="player-input">
             <input type="text" id="player1Name" placeholder="Player 1 Name (X)">
             <input type="text" id="player2Name" placeholder="Player 2 Name (O)">
@@ -32,6 +41,8 @@
             <button class="cell" data-index="7"></button>
             <button class="cell" data-index="8"></button>
         </div>
+
+        <button class="reset-btn" onclick="resetGame()">Reset Game</button>
     </div>
 
     <script src="script.js"></script>
