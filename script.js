@@ -20,3 +20,9 @@ const Gameboard = (() => {
     };
 })();
 
+const Player = (name, marker) => {
+    return {
+        getName: () => name,
+        getMarker: () => marker,
+    };
+};
